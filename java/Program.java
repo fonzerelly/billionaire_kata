@@ -54,34 +54,18 @@ import java.util.*;
             streamReader.close();
             System.out.println("loaded Records =" + data.size());
             System.out.print("Balance over all = ");
-            double balance = 0.0;
-            for (int count = 0; count < data.size(); ++count)
-            {
-                if (data.get(count).Worth > 0) balance += data.get(count).Worth;
-            }
-            System.out.print(balance);
+            System.out.print(calcBalance(data));
             System.out.println(" billions US$\n");
 
             System.out.print("average age over all = ");
-            double avgAge = 0.0;
-            for (int count = 0; count < data.size(); ++count)
-            {
-                if (data.get(count).Age > 0) avgAge += data.get(count).Age;
-            }
-            avgAge = avgAge / data.size();
-            System.out.println(avgAge);
+            System.out.println(calcAvgAge(data));
 
             System.out.print("average balance over all = ");
-            double avgBalance = 0.0;
-            for (int count = 0; count < data.size(); ++count)
-            {
-                if (data.get(count).Worth > 0) avgBalance += data.get(count).Worth;
-            }
-            avgBalance = avgBalance / data.size();
-            System.out.print(avgBalance);
+            System.out.print(calcAvgBalance(data));
             System.out.println(" billions US$\n");
 
             System.out.println("**** Top 10 ****\n");
+            //Sorts by Worth
             List<Person> data2 = new ArrayList<Person>();
             for (int count = 0; count < data.size(); ++count)
             {
@@ -104,6 +88,7 @@ import java.util.*;
             System.out.println("****************");
 
             System.out.println("*** country balance ***");
+            //reduces to Citicenship and records number of billioners and worth
             List<CountryBalance> data3 = new ArrayList<CountryBalance>();
             for (int count = 0; count < data.size(); ++count)
             {
@@ -128,6 +113,7 @@ import java.util.*;
                 found.Worth += p1.Worth;
             }
 
+            //Sorts CountryBalance by worth
             List<CountryBalance> data4 = new ArrayList<CountryBalance>();
             for (int count = 0; count < data3.size(); ++count)
             {
@@ -148,6 +134,31 @@ import java.util.*;
             }
 
         }
+
+		private static double calcAvgBalance(List<Person> data) {
+			double avgBalance = calcBalance(data);
+            avgBalance = avgBalance / data.size();
+			return avgBalance;
+		}
+
+		private static double calcAvgAge(List<Person> data) {
+			double avgAge = 0.0;
+            for (int count = 0; count < data.size(); ++count)
+            {
+                if (data.get(count).Age > 0) avgAge += data.get(count).Age;
+            }
+            avgAge = avgAge / data.size();
+			return avgAge;
+		}
+
+		private static double calcBalance(List<Person> data) {
+			double balance = 0.0;
+            for (int count = 0; count < data.size(); ++count)
+            {
+                if (data.get(count).Worth > 0) balance += data.get(count).Worth;
+            }
+			return balance;
+		}
 
         static List<String> splitString(String x, char y)
         {
