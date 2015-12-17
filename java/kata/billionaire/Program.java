@@ -1,25 +1,11 @@
+package kata.billionaire;
+
 import java.io.*;
 import java.text.DecimalFormat;
 import java.util.*;
 
     public class Program
     {
-        static class Person
-        {
-            public int Rank;
-            public String Name;
-            public String Citizenship;
-            public int Age;
-            public double Worth;
-            public String Source;
-
-            public String toString()
-            {
-                return ""+Rank + " " + Name + " " + Citizenship + " " + Age + " " + Worth + " " + Source;
-
-            }
-        }
-        
         static class CountryBalance
         {
             public String Name;
@@ -36,53 +22,27 @@ import java.util.*;
         public static void main(String[] args) throws FileNotFoundException
         {
             Scanner streamReader = new Scanner(new FileInputStream("WorldWealthList.txt"));
-            String record;
-            int size = 2;
-            List<Person> data = new ArrayList<Person>();
-            while (streamReader.hasNextLine() && size > 0)
-            {
-                record = streamReader.nextLine();
-                --size;
-            }
-            while (streamReader.hasNextLine())
-            {
-                record = streamReader.nextLine();
-                Person person2 = new Person();
-                if (SetPerson(record, person2))
-                    data.add(person2);
-            }
+            List<Person> billionaires = readPersons(streamReader);
             streamReader.close();
-            System.out.println("loaded Records =" + data.size());
+            System.out.println("loaded Records =" + billionaires.size());
             System.out.print("Balance over all = ");
-            System.out.print(calcBalance(data));
+            System.out.print(calcBalance(billionaires));
             System.out.println(" billions US$\n");
 
             System.out.print("average age over all = ");
-            System.out.println(calcAvgAge(data));
+            System.out.println(calcAvgAge(billionaires));
 
             System.out.print("average balance over all = ");
-            System.out.print(calcAvgBalance(data));
+            System.out.print(calcAvgBalance(billionaires));
             System.out.println(" billions US$\n");
 
             System.out.println("**** Top 10 ****\n");
             //Sorts by Worth
-            List<Person> data2 = new ArrayList<Person>();
-            for (int count = 0; count < data.size(); ++count)
-            {
-                int count2 = 0;
-                for (; count2 < data2.size(); ++count2)
-                {
-                    if (data.get(count).Worth > data2.get(count2).Worth)
-                    {
-                        break;
-                    }
-                }
-                data2.add(count2, data.get(count));
-            }
+            List<Person> sortedBillionaires = sortBillionairs(billionaires);
             for (int count = 0; count < 10; ++count)
             {
-                if (count < data2.size())
-                    System.out.println(data2.get(count).toString());
+                if (count < sortedBillionaires.size())
+                    System.out.println(sortedBillionaires.get(count).toString());
             }
 
             System.out.println("****************");
@@ -90,9 +50,9 @@ import java.util.*;
             System.out.println("*** country balance ***");
             //reduces to Citicenship and records number of billioners and worth
             List<CountryBalance> data3 = new ArrayList<CountryBalance>();
-            for (int count = 0; count < data.size(); ++count)
+            for (int count = 0; count < billionaires.size(); ++count)
             {
-                Person p1 = data.get(count);
+                Person p1 = billionaires.get(count);
                 CountryBalance found = null;
                 for (int count2 = 0; count2 < data3.size(); ++count2)
                 {
@@ -134,6 +94,31 @@ import java.util.*;
             }
 
         }
+
+		public static List<Person> sortBillionairs(List<Person> billionaires) {
+			List<Person> sortedBillionaires = new ArrayList<Person>(billionaires);
+			sortedBillionaires.sort(new PersonWorthComparator());
+			return sortedBillionaires;
+		}
+
+		private static List<Person> readPersons(Scanner streamReader) {
+			String record;
+            int size = 2;
+            List<Person> billionaires = new ArrayList<Person>();
+            while (streamReader.hasNextLine() && size > 0)
+            {
+                record = streamReader.nextLine();
+                --size;
+            }
+            while (streamReader.hasNextLine())
+            {
+                record = streamReader.nextLine();
+                Person person2 = new Person();
+                if (SetPerson(record, person2))
+                    billionaires.add(person2);
+            }
+			return billionaires;
+		}
 
 		private static double calcAvgBalance(List<Person> data) {
 			double avgBalance = calcBalance(data);
