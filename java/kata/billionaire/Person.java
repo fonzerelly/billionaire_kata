@@ -1,5 +1,5 @@
 package kata.billionaire;
-public class Person
+public class Person implements OfWorth
 {
     public int Rank;
     public String Name;
@@ -13,4 +13,12 @@ public class Person
         return ""+Rank + " " + Name + " " + Citizenship + " " + Age + " " + Worth + " " + Source;
 
     }
+
+	/* (non-Javadoc)
+	 * @see kata.billionaire.OfWorth#getWorth()
+	 */
+	@Override
+	public double getWorth() {
+		return this.Worth;
+	}
 }

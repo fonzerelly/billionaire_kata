@@ -6,19 +6,7 @@ import java.util.*;
 
     public class Program
     {
-        static class CountryBalance
-        {
-            public String Name;
-            public int Billionare;
-            public double Worth;
 
-            public String toString()
-            {
-            	DecimalFormat df = new DecimalFormat("#.00");
-                return Name + " " + Billionare + " " + df.format(Worth);
-
-            }
-        }
         public static void main(String[] args) throws FileNotFoundException
         {
             Scanner streamReader = new Scanner(new FileInputStream("WorldWealthList.txt"));
@@ -69,24 +57,12 @@ import java.util.*;
                     found.Name = p1.Citizenship;
                     data3.add(found);
                 }
-                found.Billionare += 1;
+                found.Billionares += 1;
                 found.Worth += p1.Worth;
             }
 
             //Sorts CountryBalance by worth
-            List<CountryBalance> data4 = new ArrayList<CountryBalance>();
-            for (int count = 0; count < data3.size(); ++count)
-            {
-                int count2 = 0;
-                for (; count2 < data4.size(); ++count2)
-                {
-                    if (data3.get(count).Worth > data4.get(count2).Worth)
-                    {
-                        break;
-                    }
-                }
-                data4.add(count2, data3.get(count));
-            }
+            List<CountryBalance> data4 = sortCountryBalances(data3);
 
             for (int count = 0; count < data4.size(); ++count)
             {
@@ -95,9 +71,15 @@ import java.util.*;
 
         }
 
+		public static List<CountryBalance> sortCountryBalances(List<CountryBalance> countryBalances) {
+			List<CountryBalance> sortedCountryBalances = new ArrayList<CountryBalance>(countryBalances);
+            sortedCountryBalances.sort(new WorthComparator());
+			return sortedCountryBalances;
+		}
+
 		public static List<Person> sortBillionairs(List<Person> billionaires) {
 			List<Person> sortedBillionaires = new ArrayList<Person>(billionaires);
-			sortedBillionaires.sort(new PersonWorthComparator());
+			sortedBillionaires.sort(new WorthComparator());
 			return sortedBillionaires;
 		}
 
