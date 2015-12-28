@@ -37,7 +37,20 @@ import java.util.*;
 
             System.out.println("*** country balance ***");
             //reduces to Citicenship and records number of billioners and worth
-            List<CountryBalance> data3 = new ArrayList<CountryBalance>();
+            List<CountryBalance> data3 = extractCountryBalances(billionaires);
+
+            //Sorts CountryBalance by worth
+            List<CountryBalance> data4 = sortCountryBalances(data3);
+
+            for (int count = 0; count < data4.size(); ++count)
+            {
+                System.out.println(data4.get(count).toString());
+            }
+
+        }
+
+		public static List<CountryBalance> extractCountryBalances(List<Person> billionaires) {
+			List<CountryBalance> data3 = new ArrayList<CountryBalance>();
             for (int count = 0; count < billionaires.size(); ++count)
             {
                 Person p1 = billionaires.get(count);
@@ -60,16 +73,8 @@ import java.util.*;
                 found.Billionares += 1;
                 found.Worth += p1.Worth;
             }
-
-            //Sorts CountryBalance by worth
-            List<CountryBalance> data4 = sortCountryBalances(data3);
-
-            for (int count = 0; count < data4.size(); ++count)
-            {
-                System.out.println(data4.get(count).toString());
-            }
-
-        }
+			return data3;
+		}
 
 		public static List<CountryBalance> sortCountryBalances(List<CountryBalance> countryBalances) {
 			List<CountryBalance> sortedCountryBalances = new ArrayList<CountryBalance>(countryBalances);
@@ -85,7 +90,7 @@ import java.util.*;
 
 		private static List<Person> readPersons(Scanner streamReader) {
 			String record;
-            int size = 2;
+            int size = 3;
             List<Person> billionaires = new ArrayList<Person>();
             while (streamReader.hasNextLine() && size > 0)
             {
